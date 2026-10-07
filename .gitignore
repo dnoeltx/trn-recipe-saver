@@ -1,0 +1,10 @@
+# Private working notes. Never committed: they hold pricing, competitor
+# analysis, and other material that should not be public.
+CLAUDE.md
+CLAUDE.local.md
+.claude/settings.local.json
+notes/
+
+# Test set raw inputs: cookbook photos (copyrighted) and family recipe
+# cards (private). Only the harness and scored results are committed.
+testdata/private/
