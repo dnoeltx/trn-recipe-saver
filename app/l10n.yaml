@@ -1,0 +1,5 @@
+# English only in 001; every user-visible string still goes through this
+# mechanism so languages can be added later as files (research R15).
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart

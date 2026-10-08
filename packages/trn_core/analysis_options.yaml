@@ -1,0 +1,10 @@
+# Dart's recommended lints plus the analyzer's strict modes (research R13).
+# Same strictness as the app; no Flutter lints because this package must not
+# depend on Flutter (research R8).
+include: package:lints/recommended.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true

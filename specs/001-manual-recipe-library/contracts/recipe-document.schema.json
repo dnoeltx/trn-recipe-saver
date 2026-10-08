@@ -30,7 +30,7 @@
       "additionalProperties": false,
       "required": ["num", "den", "form"],
       "properties": {
-        "num": { "type": "integer", "minimum": 0 },
+        "num": { "type": "integer", "minimum": 1 },
         "den": { "type": "integer", "minimum": 1 },
         "form": { "enum": ["whole", "fraction", "mixed", "decimal"] }
       }

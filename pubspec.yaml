@@ -1,0 +1,11 @@
+# Pub workspace root. Resolves app/ and packages/trn_core/ together into one
+# pubspec.lock at the repository root (research R1, plan Project Structure).
+name: trn_workspace
+publish_to: none
+
+environment:
+  sdk: ^3.13.0
+
+workspace:
+  - app
+  - packages/trn_core

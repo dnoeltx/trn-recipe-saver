@@ -1,0 +1,33 @@
+name: recipes
+description: Recipe library that shows each recipe as a Tabular Recipe Notation table.
+publish_to: none
+version: 0.1.0+1
+resolution: workspace
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  drift: ^2.35.0
+  drift_flutter: ^0.3.1
+  flutter_riverpod: ^3.4.3
+  path_provider: ^2.1.6
+  trn_core:
+    path: ../packages/trn_core
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  build_runner: ^2.16.1
+  drift_dev: ^2.35.0
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true

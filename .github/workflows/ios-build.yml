@@ -1,0 +1,31 @@
+# Unsigned iOS build on hosted macOS. Run by hand at the end of every numbered
+# spec (constitution Principle VIII, v1.2.0). It proves the code compiles for
+# iOS; it cannot be installed on a device.
+name: iOS build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ios-build:
+    name: iOS build (unsigned)
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - uses: subosito/flutter-action@v2.23.0
+        with:
+          channel: stable
+          flutter-version: 3.47.6
+          cache: true
+
+      - name: Resolve workspace
+        run: flutter pub get
+
+      - name: Generate code
+        working-directory: app
+        run: dart run build_runner build
+
+      - name: Build iOS without signing
+        working-directory: app
+        run: flutter build ios --no-codesign
