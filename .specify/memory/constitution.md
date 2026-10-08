@@ -97,6 +97,10 @@ publishing.
   file access) is limited to what each platform requires and sits behind an interface.
 - Day-to-day development and testing happen on Android. iOS is verified on a real iPhone at each
   milestone, from a checklist of platform-specific behaviors.
+- An iOS milestone is reached before any build is given to anyone other than the owner. Each
+  milestone's iOS checklist is kept in the specification that reaches it.
+- Every numbered specification ends with a successful unsigned iOS build from hosted macOS CI, so
+  code that does not compile for iOS is found within one specification even between milestones.
 - No release goes to either store without having been verified on a real device of that platform.
 
 Rationale: iOS access is limited to scheduled sessions. Batching iOS verification at milestones
@@ -168,4 +172,4 @@ keeps it deliberate rather than skipped.
 - Existing specs and plans are re-checked against an amended constitution before further work on
   them proceeds.
 
-**Version**: 1.1.0 | **Ratified**: 2026-10-08 | **Last Amended**: 2026-10-08
+**Version**: 1.2.0 | **Ratified**: 2026-10-08 | **Last Amended**: 2026-10-08
