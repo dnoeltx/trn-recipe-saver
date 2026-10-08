@@ -171,7 +171,8 @@ the table updates correctly. Delete a recipe and confirm it is gone after restar
    nothing is deleted.
 5. **Given** a saved recipe where step 2 whisks flour and sugar, **When** the cook inserts "sift
    flour" before step 2, **Then** the new step is offered the flour, step 2 now uses the sifted
-   flour instead, and the table shows the new column in its place.
+   flour instead, and the table shows "sift flour" beside the flour row with the whisk step one
+   column further right.
 6. **Given** step 3 uses the result of step 2, **When** the cook tries to move step 3 before step 2,
    **Then** the move is blocked and the app says why.
 
@@ -204,7 +205,7 @@ the table updates correctly. Delete a recipe and confirm it is gone after restar
 
 **Recipe data**
 
-- **FR-001**: The app MUST store each recipe with a title, a servings value, an optional free-text
+- **FR-001**: The app MUST store each recipe with a title, an optional servings value, an optional free-text
   source reference (for example, a book title, "Grandma's card", or a web address), how it was
   created (manual for this feature), and its creation date.
 - **FR-002**: The app MUST store each ingredient with an optional quantity, an optional unit, a
@@ -276,8 +277,7 @@ the table updates correctly. Delete a recipe and confirm it is gone after restar
 - **FR-015**: Each step cell MUST show the step's action text and, when present, its time
   (including a range and note) and temperature. Text that does not fit MUST remain readable in full without leaving the table view.
 - **FR-028**: All text in the app, including the table, MUST follow the phone's system text-size
-  setting. At larger sizes the table grows and remains fully reachable by scrolling, with
-  ingredient names still visible while moving across the steps (FR-014).
+  setting, and FR-014 MUST still hold at every size.
 - **FR-016**: Preparation steps MUST render as rows spanning the full width of the table, above the
   ingredient rows, in step order.
 
@@ -361,8 +361,8 @@ the table updates correctly. Delete a recipe and confirm it is gone after restar
 
 - The first user is the owner, cooking at home, entering recipes they already know or have on paper.
   The app has one user per device and no sign-in.
-- Steps keep the order the cook gives them (FR-027); the table never reorders steps on its own. A
-  step can only use results of steps that come before it.
+- Steps keep the order the cook gives them (FR-027), and the table places them by depth rather
+  than by that order (FR-012). A step can only use results of steps that come before it.
 - A recipe ends in exactly one finished dish. A dish served "with" something (steak with sauce) ends
   in a final step that brings them together, such as "plate and serve".
 - Discarded items (a marinade poured off, pasta water drained) are described in step text and

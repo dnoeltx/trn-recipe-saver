@@ -154,8 +154,12 @@ This is the most important finding of the research, and it changes two requireme
 - **Decision**: never fix text size. Read the system scale through Flutter's `TextScaler` (the
   older `textScaleFactor` is documented as kept "only for backward compatibility" and slated for
   removal). Table cell sizes are computed from measured text, never from fixed pixel heights.
+- **Largest standard setting**: not yet known as a number. Before the table tests are written, the
+  owner sets the S24's font size to its maximum standard setting and reads the factor with
+  `adb shell settings get system font_scale`; the value is recorded here and used by the widget
+  and golden tests (task T002).
 - **Verification**: widget and golden tests render the reference tables at scale 1.0 and at the
-  largest standard setting; SC-006 is checked by hand on the S24 at both settings.
+  recorded largest standard factor; SC-006 is checked by hand on the S24 at both settings.
 - **Source**: api.flutter.dev, `TextScaler` class.
 
 ## R11. Testing approach
@@ -219,3 +223,14 @@ This is the most important finding of the research, and it changes two requireme
   the name free to change ("TRN Recipe Saver" is a working name). The `io.github.<user>` prefix is
   a common convention for projects without their own domain.
 - **Approved** by the owner 2026-10-08.
+
+## R17. Long step text (FR-015)
+
+- **Decision**: a step cell wraps its text up to four lines; beyond that it ends with an ellipsis,
+  and tapping the cell opens the step's full text, time and temperature in a sheet over the table.
+  Closing the sheet returns to the same scroll position.
+- **Rationale**: FR-015 requires the full text without leaving the table view. Growing every row to
+  fit the longest step would make tables much taller and harm SC-006; a sheet keeps the table
+  compact and the text one tap away.
+- **Alternatives considered**: unlimited wrapping (tall tables); tooltips (long-press is hard to
+  discover and awkward with wet hands).

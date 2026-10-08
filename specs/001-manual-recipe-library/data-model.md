@@ -61,7 +61,7 @@ The unit a step actually uses, and one row of the table. Every ingredient has at
 | id | INTEGER | no | primary key |
 | ingredient_id | INTEGER | no | FK ingredient, `ON DELETE CASCADE` |
 | position | INTEGER | no | `UNIQUE (ingredient_id, position)` |
-| qty_num, qty_den, qty_form | as ingredient | yes | null on an unsplit ingredient's single portion, meaning "all of it" |
+| qty_num, qty_den, qty_form | as ingredient | yes | null on an ingredient's only portion means "all of it"; null on one of several portions (a split non-numeric ingredient such as "salt, to taste") means the amount is described by its label |
 | label | TEXT | yes | "for the topping"; shown in the row |
 
 ### step

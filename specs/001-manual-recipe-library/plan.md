@@ -44,7 +44,7 @@ table, editor, step input picker, about)
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-Checked against constitution **v1.1.0**.
+Checked against constitution **v1.2.0** (Principle VIII's iOS milestone defined; see the amendment pull request).
 
 | Principle | Status | How this plan complies |
 |---|---|---|
@@ -55,7 +55,7 @@ Checked against constitution **v1.1.0**.
 | V. Works without AI | Pass | Everything in 001 is offline and model-free (FR-023). |
 | VI. Respect the source | Pass | `source_ref` stored; Chu credited (FR-025). Reference fixtures are written by the owner, not copied from cookbooks or Chu's site. R14 records the open notation question. |
 | VII. User owns their data | Pass | On-device storage; only platform backup leaves, as v1.1.0 permits (R4); no secrets, no analytics; crash reporting is not added in 001. |
-| VIII. One codebase, both platforms | Pass | One Flutter codebase; hosted macOS build on demand; first iOS milestone check at the end of 001 (quickstart). |
+| VIII. One codebase, both platforms | Pass | One Flutter codebase. 001 ends with a successful unsigned iOS build (T072). The on-device iPhone check is due at the first iOS milestone, before any build is given to anyone other than the owner; 001 builds stay with the owner, so it is not due here (T073). |
 | IX. Test-first | Pass | Core is pure and test-first; storage tested in memory; renderer by goldens; device behavior by integration tests (R11). |
 | X. Spec before code | Pass | R5 required changing FR-012, FR-016, US1 scenario 4 and US2 scenario 3. The owner approved and the spec was amended first (Clarifications, plan research session), before any task or code. |
 | XI. Evidence over assumption | Pass | Every version and platform fact in research.md cites its source and date; iOS backup location is flagged for device confirmation. |

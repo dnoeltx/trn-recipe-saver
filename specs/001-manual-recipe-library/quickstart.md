@@ -12,7 +12,7 @@ in [plan.md](plan.md) (a Dart pub workspace with `app/` and `packages/trn_core/`
 - The Android SDK already installed for the series' earlier apps.
 - The Galaxy S24 with USB debugging on; `adb devices` lists it. `adb` is at
   `$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe` (not on PATH).
-- iOS checks need a hosted macOS CI run and the milestone iPhone session (Principle VIII); they are
+- iOS checks need a hosted macOS CI run, and an iPhone session at the first iOS milestone (Principle VIII); they are
   not part of the everyday loop.
 
 ## Setup
@@ -54,11 +54,17 @@ flutter test integration_test -d <S24 device id>
 | SC-007 20 force-close cycles | integration test kills the app mid-entry 20 times; saved recipes compare equal |
 | SC-008 backup restore | `adb shell bmgr backupnow <package>`, uninstall, reinstall, `adb shell bmgr restore`; every recipe present and equal ([research.md](research.md) R4) |
 
-## At the iOS milestone
+## iOS
 
-The everyday macOS workflow builds without signing, which proves the code compiles for iOS but
-cannot be installed. Installing on the iPhone needs a signed build delivered through TestFlight,
-which needs the Apple Developer Program membership; that setup is its own task before the first
-iOS milestone. Then install on the iPhone and walk the same S24 table with the iOS
-checklist: text size (Settings, Accessibility, Larger Text), backup location under Application
-Support, and SC-006.
+**Every spec, including this one**: trigger `.github/workflows/ios-build.yml` and confirm the
+unsigned build succeeds. It proves the code compiles for iOS; it cannot be installed.
+
+**At the first iOS milestone** (constitution Principle VIII v1.2.0: before any build is given to
+anyone other than the owner), not in 001: installing on the iPhone needs a signed build through
+TestFlight, which needs the Apple Developer Program membership. Then walk the S24 checks above on
+the iPhone, plus this iOS checklist carried forward from 001:
+
+- text size (Settings, Accessibility, Larger Text) and SC-006 at the largest standard size
+- the database lives under Application Support and is restored from an iCloud backup (SC-008,
+  research R4)
+- the table and editor behave as on the S24
