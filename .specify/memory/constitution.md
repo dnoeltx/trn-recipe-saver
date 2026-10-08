@@ -1,19 +1,3 @@
-<!--
-Sync Impact Report (scratch for review; remove before committing)
-- Version change: template (unversioned) → 1.0.0 (initial ratification)
-- Principles added: I. The Model Suggests, the Validator Decides; II. Conversion Quality Is
-  Measured; III. Cost Is Tracked; IV. The Structure Is the Recipe; V. Works Without AI;
-  VI. Respect the Source; VII. The User Owns Their Data; VIII. One Codebase, Both Platforms;
-  IX. Test-First; X. Spec Before Code; XI. Evidence Over Assumption
-- Sections added: Constraints; Development Workflow and Quality Gates; Governance
-- Sections removed: none
-- Source: IX, X, XI and the workflow section adapted from CustomBinauralBeats v1.0.0;
-  I through VIII new, ratified by the owner 2026-10-08 (decisions A=(b), B=allow, C=allow;
-  principle VII reworded to permit an anonymous identity for usage limits)
-- Templates: none modified (read at runtime, per command scope)
-- Deferred TODOs: none
--->
-
 # TRN Recipe Saver Constitution
 
 ## Core Principles
