@@ -77,9 +77,14 @@ publishing.
 ### VII. The User Owns Their Data
 
 - The recipe library is stored on the device.
-- Data leaves the device only when the user starts an import, and only what that import needs
-  (the URL or the photo). The app tells the user this, and the model provider's data retention
-  and training terms are verified and disclosed before release.
+- User content leaves the device by only two paths:
+  - an import the user starts, sending only what that import needs (the URL or the photo). The
+    app tells the user this, and the model provider's data retention and training terms are
+    verified and disclosed before release;
+  - the platform's own user-controlled device backup (Android backup to the user's Google
+    account, iCloud backup), which the app participates in so a replaced phone restores the
+    library.
+- Crash reports (below) MUST NOT contain recipe content.
 - No API key or other secret is ever included in the app or the repository. Provider keys live
   only in the backend.
 - An anonymous identity used only for usage limits and abuse prevention is allowed. User accounts,
@@ -163,4 +168,4 @@ keeps it deliberate rather than skipped.
 - Existing specs and plans are re-checked against an amended constitution before further work on
   them proceeds.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-08 | **Last Amended**: 2026-10-08
+**Version**: 1.1.0 | **Ratified**: 2026-10-08 | **Last Amended**: 2026-10-08
