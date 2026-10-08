@@ -1,0 +1,7 @@
+{
+  "@@locale": "en",
+  "appTitle": "Recipes",
+  "@appTitle": {
+    "description": "Working app name shown in the title bar and task switcher."
+  }
+}

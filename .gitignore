@@ -8,3 +8,10 @@ notes/
 # Test set raw inputs: cookbook photos (copyrighted) and family recipe
 # cards (private). Only the harness and scored results are committed.
 testdata/private/
+
+# Dart and Flutter build output and tool state. drift_schemas/ stays tracked:
+# it is the committed schema history that migration tests run against.
+.dart_tool/
+build/
+*.g.dart
+app/lib/l10n/app_localizations*.dart

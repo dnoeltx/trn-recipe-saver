@@ -1,0 +1,14 @@
+# Flutter's recommended lints plus the analyzer's strict modes (research R13).
+# CI fails on any warning.
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  exclude:
+    - "**/*.g.dart"
+    - build/**
+    - android/**
+    - ios/**
