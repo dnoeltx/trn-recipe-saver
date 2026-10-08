@@ -161,10 +161,11 @@ This is the most important finding of the research, and it changes two requireme
 - **Decision**: never fix text size. Read the system scale through Flutter's `TextScaler` (the
   older `textScaleFactor` is documented as kept "only for backward compatibility" and slated for
   removal). Table cell sizes are computed from measured text, never from fixed pixel heights.
-- **Largest standard setting**: not yet known as a number. Before the table tests are written, the
-  owner sets the S24's font size to its maximum standard setting and reads the factor with
-  `adb shell settings get system font_scale`; the value is recorded here and used by the widget
-  and golden tests (task T002).
+- **Largest standard setting: 2.0.** Measured 2026-10-08 on the owner's phone (Galaxy S24 Ultra,
+  SM-S928U, Android 16) with the Font size slider at its maximum: `adb shell settings get system
+  font_scale` returned `2.0` (default `1.0`). Widget and golden tests use `TextScaler.linear(2.0)`.
+  A linear factor is the demanding case: recent Android versions may scale already-large text by
+  less than the factor, so passing at linear 2.0 covers the real device (task T002).
 - **Verification**: widget and golden tests render the reference tables at scale 1.0 and at the
   recorded largest standard factor; SC-006 is checked by hand on the S24 at both settings.
 - **Source**: api.flutter.dev, `TextScaler` class.
