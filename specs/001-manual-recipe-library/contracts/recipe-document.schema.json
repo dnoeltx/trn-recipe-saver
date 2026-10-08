@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dnoeltx/trn-recipe-saver/specs/001-manual-recipe-library/contracts/recipe-document.schema.json",
+  "title": "Recipe document",
+  "description": "One recipe as a self-contained document: the editor's in-memory form, the validation fixture format, and the shape later imports will produce. Ids are local to the document. Shape only; structural rules are in validation.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "title", "origin", "ingredients", "steps"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "servings": { "type": "integer", "minimum": 1 },
+    "servingsNote": { "type": "string" },
+    "sourceRef": { "type": "string" },
+    "origin": { "enum": ["manual", "url", "photo"] },
+    "ingredients": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ingredient" }
+    },
+    "steps": {
+      "type": "array",
+      "description": "In the recipe's step order.",
+      "items": { "$ref": "#/$defs/step" }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+    "quantity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["num", "den", "form"],
+      "properties": {
+        "num": { "type": "integer", "minimum": 0 },
+        "den": { "type": "integer", "minimum": 1 },
+        "form": { "enum": ["whole", "fraction", "mixed", "decimal"] }
+      }
+    },
+    "ingredient": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "portions"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "quantity": { "$ref": "#/$defs/quantity" },
+        "quantityText": { "type": "string" },
+        "unit": { "type": "string" },
+        "name": { "type": "string", "minLength": 1 },
+        "prepNote": { "type": "string" },
+        "portions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "quantity": { "$ref": "#/$defs/quantity" },
+              "label": { "type": "string" }
+            }
+          }
+        }
+      },
+      "not": { "required": ["quantity", "quantityText"] }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "action", "inputs"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "enum": ["combine", "preparation"] },
+        "action": { "type": "string", "minLength": 1 },
+        "resultLabel": { "type": "string" },
+        "time": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "seconds": { "type": "integer", "minimum": 1 },
+            "maxSeconds": { "type": "integer", "minimum": 2 },
+            "note": { "type": "string" }
+          },
+          "dependentRequired": { "maxSeconds": ["seconds"] }
+        },
+        "temperature": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "unit"],
+          "properties": {
+            "value": { "type": "number" },
+            "unit": { "enum": ["F", "C"] }
+          }
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "minProperties": 1,
+            "maxProperties": 1,
+            "properties": {
+              "portion": { "$ref": "#/$defs/id" },
+              "step": { "$ref": "#/$defs/id" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

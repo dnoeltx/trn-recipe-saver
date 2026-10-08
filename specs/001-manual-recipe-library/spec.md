@@ -11,8 +11,9 @@
 ## Background
 
 Tabular Recipe Notation (TRN), created by Michael Chu at Cooking for Engineers in 2004, lays a
-recipe out as a table: ingredients run down the left column, steps run left to right, and each
-step's cell spans every ingredient or earlier result it combines. A recipe in TRN is therefore a
+recipe out as a table: ingredients run down the left column, steps run left to right in order of
+how much has been combined, and each step's cell spans every ingredient or earlier result it
+combines. A recipe in TRN is therefore a
 tree: ingredients are the leaves, each step joins some of what is on the counter into one new
 thing, and the finished dish is the root.
 
@@ -44,6 +45,14 @@ same editor defined here.
 - Q: Should the table follow the phone's text-size setting? → A: Yes, everywhere including the
   table; SC-006 is also checked at the largest standard text size (FR-028).
 
+### Session 2026-10-08 (plan research)
+
+- Q: Should table columns follow step order, as first specified, or combining depth, as Michael
+  Chu's own tables do (found by parsing his published tables; see research.md R5)? → A: Combining
+  depth, as in the original format. Independent steps share a column, each step sits one column
+  right of its deepest input, and preparation steps are full-width rows at the top (FR-012,
+  FR-016, US1 scenario 4, US2 scenario 3 amended).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Enter a recipe and see it as a TRN table (Priority: P1)
@@ -71,8 +80,9 @@ hand-drawn TRN reference for the same recipe.
 3. **Given** more than one item still on the counter, **When** the cook looks at the recipe,
    **Then** the app shows that the recipe is not yet complete and which items are still unused.
 4. **Given** a completed recipe, **When** it is saved and opened, **Then** the table shows each
-   ingredient as a row on the left, the steps left to right in the recipe's step order, and
-   each step's cell spanning exactly the rows of what it combined.
+   ingredient as a row on the left, each step one column to the right of the deepest thing it
+   combines, steps that do not depend on each other sharing a column, and each step's cell
+   spanning exactly the rows of what it combined.
 5. **Given** ingredients entered in an order that would scatter a step's inputs across the table,
    **When** the table is shown, **Then** the rows are arranged so that every step's inputs sit in
    adjacent rows, without the cook rearranging anything.
@@ -106,7 +116,7 @@ divided between them, plus "preheat oven") and confirm the table matches a hand-
 2. **Given** a split ingredient, **When** the table is shown, **Then** each portion appears as its
    own row next to the step that uses it.
 3. **Given** a preparation step with no inputs, **When** the table is shown, **Then** that step
-   spans the full height of the table at its position in the step order.
+   appears as a row across the full width of the table, above the ingredients, in step order.
 4. **Given** a preparation step, **When** the cook continues adding steps, **Then** the counter is
    unchanged by it: it consumes nothing and adds nothing.
 
@@ -250,8 +260,13 @@ the table updates correctly. Delete a recipe and confirm it is gone after restar
 **Table view**
 
 - **FR-012**: The app MUST render each recipe as a TRN table: ingredient portions as rows down the
-  left, steps as columns in the recipe's step order, and each step's cell spanning exactly the rows of
-  the items it combines (directly, or through the earlier results it combines).
+  left and steps placed by combining depth: a step sits in the column immediately right of the
+  deepest item it combines, steps that do not depend on each other share a column, and an input
+  that is shallower than its step is padded with an empty cell so the step still sits beside it.
+  Each step's cell spans exactly the rows of the items it combines (directly, or through the
+  earlier results it combines). The table is therefore as wide as the recipe is deep, not as wide
+  as it has steps. The recipe's step order is kept for editing and for tie-breaking row order
+  (FR-013), but does not assign columns.
 - **FR-013**: The app MUST arrange ingredient rows so that every step's inputs occupy adjacent rows,
   without the cook arranging them. Where several arrangements satisfy this, ingredients MUST keep
   the order in which they were entered as far as possible.
@@ -263,8 +278,8 @@ the table updates correctly. Delete a recipe and confirm it is gone after restar
 - **FR-028**: All text in the app, including the table, MUST follow the phone's system text-size
   setting. At larger sizes the table grows and remains fully reachable by scrolling, with
   ingredient names still visible while moving across the steps (FR-014).
-- **FR-016**: Preparation steps MUST render spanning the full height of the table at their position
-  in the step order.
+- **FR-016**: Preparation steps MUST render as rows spanning the full width of the table, above the
+  ingredient rows, in step order.
 
 **Incomplete and invalid recipes**
 
