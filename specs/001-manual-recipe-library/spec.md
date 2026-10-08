@@ -24,6 +24,26 @@ This is the first feature and the foundation for later ones. Later imports (from
 photo) will produce the same structure, be checked by the same structural rules, and open in the
 same editor defined here.
 
+## Clarifications
+
+### Session 2026-10-08
+
+- Q: If the phone is lost or replaced, should the recipe library come back through the phone's own
+  backup (Google backup on Android, iCloud on iPhone)? → A: Yes. The library is included in the
+  platform's own user-controlled backup; constitution Principle VII is to be amended to permit
+  this explicitly before planning (FR-026).
+- Q: When editing a saved recipe, can the cook insert a new step between existing steps, or move a
+  step to a different position? → A: Both. Steps can be inserted anywhere and moved, but a move
+  that would place a step before a step whose result it uses is blocked (FR-027).
+- Q: How should ingredients that are separated into different things (eggs into yolks and whites)
+  be handled, as opposed to divided by amount? → A: Entered as separate ingredients ("2 egg
+  yolks", "2 egg whites"). Splitting remains quantity-only, with its add-up check (FR-008).
+- Q: How should a step's cooking time be recorded? → A: Structured: a duration, an optional
+  maximum duration for a range (25 to 30 minutes), and an optional free-text note ("until golden")
+  (FR-003).
+- Q: Should the table follow the phone's text-size setting? → A: Yes, everywhere including the
+  table; SC-006 is also checked at the largest standard text size (FR-028).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Enter a recipe and see it as a TRN table (Priority: P1)
@@ -51,7 +71,7 @@ hand-drawn TRN reference for the same recipe.
 3. **Given** more than one item still on the counter, **When** the cook looks at the recipe,
    **Then** the app shows that the recipe is not yet complete and which items are still unused.
 4. **Given** a completed recipe, **When** it is saved and opened, **Then** the table shows each
-   ingredient as a row on the left, the steps left to right in the order they were entered, and
+   ingredient as a row on the left, the steps left to right in the recipe's step order, and
    each step's cell spanning exactly the rows of what it combined.
 5. **Given** ingredients entered in an order that would scatter a step's inputs across the table,
    **When** the table is shown, **Then** the rows are arranged so that every step's inputs sit in
@@ -139,6 +159,11 @@ the table updates correctly. Delete a recipe and confirm it is gone after restar
    appears in the library, including after the app is restarted.
 4. **Given** the cook starts deleting a recipe, **When** they cancel the confirmation, **Then**
    nothing is deleted.
+5. **Given** a saved recipe where step 2 whisks flour and sugar, **When** the cook inserts "sift
+   flour" before step 2, **Then** the new step is offered the flour, step 2 now uses the sifted
+   flour instead, and the table shows the new column in its place.
+6. **Given** step 3 uses the result of step 2, **When** the cook tries to move step 3 before step 2,
+   **Then** the move is blocked and the app says why.
 
 ---
 
@@ -176,8 +201,11 @@ the table updates correctly. Delete a recipe and confirm it is gone after restar
   name, and an optional preparation note (for example, "sifted", "room temperature"). Quantities
   MUST accept whole numbers, decimals, and fractions (for example, 1/3 and 1 1/2) and MUST
   preserve fractions as entered.
-- **FR-003**: The app MUST store each step with its action text, an optional duration, an optional
-  temperature with its unit as entered, and the items it combines.
+- **FR-003**: The app MUST store each step with its action text, an optional time, an optional
+  temperature with its unit as entered, and the items it combines. A time is a duration (to the
+  second, for steps like "whisk 30 seconds"), an optional longer duration when the recipe gives a
+  range ("25 to 30 minutes"), and an optional free-text note ("until golden brown"). The longer
+  duration, when present, MUST be greater than the first. A step may have a note with no duration.
 - **FR-004**: An item a step combines MUST be either an ingredient portion or the result of an
   earlier step. A step MAY optionally give its result a short label (for example, "dry mix"); when
   it does not, the result is identified by the step's action text.
@@ -198,6 +226,13 @@ the table updates correctly. Delete a recipe and confirm it is gone after restar
   to the counter.
 - **FR-010**: The app MUST show at all times during entry whether the recipe is complete (exactly
   one item on the counter and every step valid) and, if not, what remains to be done.
+- **FR-027**: The cook MUST be able to insert a new step at any position in the step order and to
+  move an existing step to another position. A step inserted at a position MUST be offered the
+  items available at that point in the order: those not used by any step, plus those used only by
+  a later step. When the inserted step takes an item from a later step, that later step MUST use the
+  inserted step's result in its place, so the recipe stays complete. The app MUST block, with an explanation, any
+  move that would place a step before a step whose result it uses, or after a step that uses its
+  result.
 
 **Structural rules**
 
@@ -215,7 +250,7 @@ the table updates correctly. Delete a recipe and confirm it is gone after restar
 **Table view**
 
 - **FR-012**: The app MUST render each recipe as a TRN table: ingredient portions as rows down the
-  left, steps as columns in the order entered, and each step's cell spanning exactly the rows of
+  left, steps as columns in the recipe's step order, and each step's cell spanning exactly the rows of
   the items it combines (directly, or through the earlier results it combines).
 - **FR-013**: The app MUST arrange ingredient rows so that every step's inputs occupy adjacent rows,
   without the cook arranging them. Where several arrangements satisfy this, ingredients MUST keep
@@ -223,8 +258,11 @@ the table updates correctly. Delete a recipe and confirm it is gone after restar
 - **FR-014**: The table MUST be readable on a phone held upright: ingredient names stay visible
   while the cook moves across the steps, and every part of a table larger than the screen is
   reachable by scrolling.
-- **FR-015**: Each step cell MUST show the step's action text and, when present, its duration and
-  temperature. Text that does not fit MUST remain readable in full without leaving the table view.
+- **FR-015**: Each step cell MUST show the step's action text and, when present, its time
+  (including a range and note) and temperature. Text that does not fit MUST remain readable in full without leaving the table view.
+- **FR-028**: All text in the app, including the table, MUST follow the phone's system text-size
+  setting. At larger sizes the table grows and remains fully reachable by scrolling, with
+  ingredient names still visible while moving across the steps (FR-014).
 - **FR-016**: Preparation steps MUST render spanning the full height of the table at their position
   in the step order.
 
@@ -248,13 +286,21 @@ the table updates correctly. Delete a recipe and confirm it is gone after restar
 - **FR-022**: The cook MUST be able to delete a recipe, after confirming. Deletion removes the
   recipe and everything belonging to it.
 - **FR-023**: Every capability in this feature MUST work with no network connection (constitution
-  Principle V), and the app MUST NOT send any recipe data off the device (Principle VII).
+  Principle V), and the app MUST NOT send any recipe data off the device (Principle VII),
+  other than through the platform backup in FR-026.
 - **FR-024**: Saved recipes MUST survive closing the app, killing it, and restarting the device.
 
 **Credit**
 
 - **FR-025**: The app MUST credit Michael Chu and Cooking for Engineers as the creator of Tabular
   Recipe Notation in a place the cook can find from the main screen, for example an About screen.
+
+**Backup**
+
+- **FR-026**: The recipe library MUST be included in the platform's own user-controlled device
+  backup, so that restoring a backup to a new phone of the same platform restores the library.
+  No other copy of the library leaves the device. This depends on the Principle VII amendment
+  noted under Clarifications.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -266,7 +312,8 @@ the table updates correctly. Delete a recipe and confirm it is gone after restar
 - **Ingredient portion**: the unit a step actually uses. An unsplit ingredient has one portion equal
   to the whole; a split ingredient has two or more portions whose quantities add up to the whole.
   Each portion is a row in the table.
-- **Step**: one thing the cook does. Action text, optional duration, optional temperature,
+- **Step**: one thing the cook does. Action text, optional time (duration, optional upper bound of
+  a range, optional note), optional temperature,
   optional result label, position in the step order. Either combines one or more inputs into a
   result, or is a preparation step with no inputs.
 - **Step input**: a link from a step to one thing it combines: either an ingredient portion or the
@@ -288,20 +335,26 @@ the table updates correctly. Delete a recipe and confirm it is gone after restar
 - **SC-004**: With 500 recipes stored, search results update within 1 second of each keystroke.
 - **SC-005**: Every user story passes its acceptance scenarios with the device in airplane mode.
 - **SC-006**: A table of 15 ingredients and 10 steps can be read in full on the owner's phone held
-  upright, with no text cut off without a way to read it, and without zooming.
+  upright, with no text cut off without a way to read it, and without zooming, both at the
+  phone's default text size and at its largest standard text size setting.
 - **SC-007**: No saved recipe is lost or altered across 20 cycles of force-closing the app during
   entry and restarting it.
+- **SC-008**: After the app is uninstalled and the platform backup restored, every recipe that had
+  been backed up is present and unchanged.
 
 ## Assumptions
 
 - The first user is the owner, cooking at home, entering recipes they already know or have on paper.
   The app has one user per device and no sign-in.
-- Steps keep the order the cook entered them in; the table does not reorder steps. A step can only
-  use results of steps entered before it.
+- Steps keep the order the cook gives them (FR-027); the table never reorders steps on its own. A
+  step can only use results of steps that come before it.
 - A recipe ends in exactly one finished dish. A dish served "with" something (steak with sauce) ends
   in a final step that brings them together, such as "plate and serve".
 - Discarded items (a marinade poured off, pasta water drained) are described in step text and
   consumed by the step that discards them; no separate "discard" concept is needed.
+- An ingredient separated into different things (eggs into yolks and whites) is entered as
+  separate ingredients, as printed recipes already do. Splitting (FR-008) only divides an
+  ingredient by amount; there is no "separate into parts" action and no step produces two results.
 - Only ingredients can be split in this feature. Dividing an intermediate result (for example,
   dividing batter between two pans that are then treated the same) is described in step text.
   Splitting intermediate results is a candidate for a later spec.
